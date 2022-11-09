@@ -5,6 +5,7 @@ const pool = mysql.createPool({
     host: 'localhost',   // 主机地址
     user: 'root',        // 用户名
     password: '',        // 密码
-    database: 'rcstudios'// 数据库名
+    database: 'rcstudios',// 数据库名
+    multipleStatements: true
 })
 module.exports = pool;
