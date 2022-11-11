@@ -12,6 +12,8 @@ app.use(express.urlencoded({
 }))
 
 app.use(require('./router/MovieActor'))
+app.use(require('./router/MovieDirector'))
+app.use(require('./router/MovieInfo'))
 // 配置跨域
 
 // 解析post请求参数
