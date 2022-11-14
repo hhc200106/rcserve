@@ -108,15 +108,21 @@ router.get('/movie-infos', async (req, resp) => {
         resp.send(Response.error(400, error))
         throw error
     }
+    try {
+        let sql = 'select * from movie_info limit ?,?'
+        let startIndex = (page - 1) * pagesize
+        let size = parseInt(pagesize)
+        let result = await pool.querySync(sql, [startIndex, size])
+        let sql2 = 'select count(*) as  count from movie_info'
+        let result2 = await pool.querySync(sql2, [startIndex, size])
+        console.log(result2)
+        let total = result2[0].count
+        resp.send(Response.ok({page: parseInt(page), pagesize: size, total, result}))
 
-    let sql = 'select * from movie_info limit ?,?'
-    let startIndex = (page - 1) * 10
-    let size = parseInt(pagesize)
-    let result = await pool.querySync(sql, [startIndex, size])
-    let sql2 = 'select count(*) as  count from movie_info limit ?,?'
-    let result2 = await pool.querySync(sql2, [startIndex, size])
-    let total = result2[0].count
-    resp.send(Response.ok({page: parseInt(page), pagesize: size, total, result}))
+    } catch (error) {
+        resp.send(Response.error(error))
+    }
+
 })
 // 将router对象导出
 module.exports = router
