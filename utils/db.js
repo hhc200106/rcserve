@@ -8,4 +8,17 @@ const pool = mysql.createPool({
     database: 'rcstudios',// 数据库名
     multipleStatements: true
 })
+
+pool.querySync = (sql, params) => {
+    return new Promise((resolve, reject) => {
+        pool.query(sql, params, (error, result) => {
+            if (error) {
+                reject(error)
+            } else {
+                resolve(result)
+            }
+        })
+    })
+}
+
 module.exports = pool;

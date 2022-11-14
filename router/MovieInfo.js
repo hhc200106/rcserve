@@ -95,6 +95,28 @@ router.post('/movie-actors/name', (req, resp) => {
     })
 })
 
+router.get('/movie-infos', async (req, resp) => {
+    let {page, pagesize} = req.query
+    console.log(page, pagesize)
+    //TODO 服务端表单验证
+    let schema = Joi.object({
+        page: Joi.number().required(),
+        pagesize: Joi.number().integer().max(100).required()
+    })
+    let {error, value} = schema.validate(req.query)
+    if (error) {
+        resp.send(Response.error(400, error))
+        throw error
+    }
 
+    let sql = 'select * from movie_info limit ?,?'
+    let startIndex = (page - 1) * 10
+    let size = parseInt(pagesize)
+    let result = await pool.querySync(sql, [startIndex, size])
+    let sql2 = 'select count(*) as  count from movie_info limit ?,?'
+    let result2 = await pool.querySync(sql2, [startIndex, size])
+    let total = result2[0].count
+    resp.send(Response.ok({page: parseInt(page), pagesize: size, total, result}))
+})
 // 将router对象导出
 module.exports = router
