@@ -26,13 +26,15 @@ router.post("/user/login", (req, resp)=>{
     return; // 结束
   }
   // 查询数据库，账号密码是否填写正确
-  let sql = "select * from admin where username=? and password=MD5(?)"
+  let sql = "select * from admin where admin_name=? and password=MD5(?)"
   pool.query(sql, [username, password], (error, result)=>{
     if (error) {
       resp.send(Response.error(500, error));
       throw error;
     }
-    if(result.length==0){
+
+    if(result.length===0){
+      console.log({result: result})
       resp.send(Response.error(1001, '账号密码输入错误'));
     }else{
       // 获取登录用户对象
