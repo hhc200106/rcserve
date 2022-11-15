@@ -1,25 +1,31 @@
 /** 封装响应对象 */
-const {number} = require("joi");
 const response = {
+
     /**
-     * 返回一个正确的响应对象
-     * @param {object} data 响应数据
-     * @param {number} code 状态码
-     * @param {object} errmsg 错误信息
-     * */
-    ok: (data) => {
+     * 返回正确的响应对象 {code:200, msg:'ok', data:data}
+     * @param {Object} data 响应数据
+     */
+    ok : (data) => {
         return {
-            code: 200,
-            msg: 'ok',
-            data: data
+            code : 200,
+            msg  : 'ok',
+            data : data
         }
     },
-    error: (code, errmsg) => {
+
+    /**
+     * 返回错误的响应对象  { code:400, msg: '错误消息' }
+     * @param {number} code  状态码
+     * @param {Object} errmsg  错误消息
+     * @returns 
+     */
+    error : (code, errmsg) => {
         return {
-            code: code,
-            msg: errmsg
+            code : code,
+            msg : errmsg
         }
     }
+
 }
 
-module.exports = response
+module.exports = response;
